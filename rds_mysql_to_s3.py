@@ -13,10 +13,13 @@
 #
 
 import boto3, botocore
+from datetime import datetime as dt
+
+tdatetime = dt.now()
 
 ## Set the values below if using Lambda Scheduled Event as an Event Source, otherwise leave empty and send data through the Lambda event payload
 S3BCUKET=''
-S3PREFIX=''
+S3PREFIX='' + tdatetime.strftime('%Y/%m/%d') + '/'
 RDSINSANCE=''
 LOGNAME=''
 LASTRECIEVED=''
@@ -27,7 +30,7 @@ def lambda_handler(event, context):
 	logFileData = ""
 	if {'BucketName','S3BucketPrefix','RDSInstanceName','LogNamePrefix','lastRecievedFile','Region'}.issubset(event):
 		S3BucketName = event['BucketName']	
-		S3BucketPrefix = event['S3BucketPrefix']
+		S3BucketPrefix = event['S3BucketPrefix'] + tdatetime.strftime('%Y/%m/%d') + '/'
 		RDSInstanceName = event['RDSInstanceName']
 		logNamePrefix = event['LogNamePrefix']
 		lastRecievedFile = S3BucketPrefix + event['lastRecievedFile']
